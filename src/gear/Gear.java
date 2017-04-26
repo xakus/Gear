@@ -23,6 +23,7 @@ public class Gear {
             realAngleR;
     private int numRays;
     private int[] x, y;
+    private double linght=0.0;
     private Polygon polygon;
 
     public double getKoordX() {
@@ -80,16 +81,21 @@ public class Gear {
     public void setNumRays(int numRays) {
         this.numRays = numRays;
     }
-
+    
+   public double getLenght (){
+       return linght;
+   }
 
     
-    private double angleCalculate() {
+    private double angleToLenght(double angle) {
 
-        realAngleR =( (360.0 / (double) (numRays*2 )) +startAngleR)/((outerRadius+innerRadius)/2);
-
-        return realAngleR;
+        realAngleR =(180.0/(numRays*3.0))+angle;
+        linght=(Math.PI*outerRadius*realAngleR)/180.0;
+        return linght;
     }
-
+   private double lengthToAngle(double l){
+       return ((180.0*l)/(Math.PI*outerRadius));
+   }
     public Gear() {
 
         this.koordX = 0;
@@ -131,11 +137,11 @@ public class Gear {
         this.numRays = numRays;
         x = new int[numRays * 2];
         y = new int[numRays * 2];
-       
+        angleToLenght(lengthToAngle(startAngleR));
         polygon = new Polygon();
         double deltaAngleR = Math.PI / (double) numRays;
         for (int i = 0; i < numRays * 2.0; i++) {
-            double angleR = angleCalculate() + (double) i * deltaAngleR;
+            double angleR =lengthToAngle(startAngleR)+ (double) i * deltaAngleR;
             double ca = Math.cos(angleR);
             double sa = Math.sin(angleR);
             double relX = ca;
@@ -166,7 +172,7 @@ public class Gear {
         Polygon p = new Polygon();
         double deltaAngleR = Math.PI / (double) numRays;
         for (int i = 0; i < numRays * 2.0; i++) {
-            double angleR = angleCalculate() + (double) i * deltaAngleR;
+            double angleR =lengthToAngle(startAngleR)+ (double) i * deltaAngleR;
             double ca = Math.cos(angleR);
             double sa = Math.sin(angleR);
             double relX = ca;
