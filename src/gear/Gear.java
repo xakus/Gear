@@ -122,40 +122,42 @@ public class Gear {
         this.outerRadius = outerRadius;
         this.startAngleR = startAngleR;
         this.numRays = numRays;
-        polygon = drawGear(koordX, koordY, innerRadius, outerRadius, numRays, startAngleR);
+        polygon = drawGear(koordX, koordY, numRays, startAngleR,0);
     }
 
     public Polygon drawGear(double koordX, double koordY,
-            double innerRadius, double outerRadius, int numRays,
-            double startAngleR) {
-
+            int numRays,
+            double startAngleR,double stepLenght ) {
+        
         this.koordX = koordX;
         this.koordY = koordY;
         this.innerRadius = innerRadius;
         this.outerRadius = outerRadius;
         this.startAngleR = startAngleR;
-        this.numRays = numRays;
+        this.numRays = numRays*2;
+        this.outerRadius= (numRays*stepLenght)/(2*Math.PI);
+        this.innerRadius=this.outerRadius-8.0;
         x = new int[numRays * 2];
         y = new int[numRays * 2];
         angleToLenght(lengthToAngle(startAngleR));
         polygon = new Polygon();
-        double deltaAngleR = Math.PI / (double) numRays;
-        for (int i = 0; i < numRays * 2.0; i++) {
+        double deltaAngleR = Math.PI / (double)  this.numRays;
+        for (int i = 0; i <  this.numRays * 2.0; i++) {
             double angleR =lengthToAngle(startAngleR)+ (double) i * deltaAngleR;
             double ca = Math.cos(angleR);
             double sa = Math.sin(angleR);
             double relX = ca;
             double relY = sa;
             if ((i & 2) == 0) {
-                relX *= outerRadius;
-                relY *= outerRadius;
+                relX *=  this.outerRadius;
+                relY *=  this.outerRadius;
             } else {
-                relX *= innerRadius;
-                relY *= innerRadius;
+                relX *=   this.innerRadius;
+                relY *=   this.innerRadius;
             }
 
-            x[i] = (int) (koordX + relX);
-            y[i] = (int) (koordY + relY);
+            //x[i] = (int) (koordX + relX);
+           // y[i] = (int) (koordY + relY);
 
             polygon.addPoint((int) (koordX + relX), (int) (koordY + relY));
 
