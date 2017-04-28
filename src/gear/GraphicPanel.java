@@ -50,8 +50,8 @@ public class GraphicPanel extends JPanel implements Runnable {
         int dearSize = 32;
         int radius=64;
         double step=12.5;   
-            ang += (Math.PI/360)/10;
-            
+            ang +=10;
+            //System.out.println("ang="+ang+" Degree="+Gear.radianToDegree(ang));
 
         
         g.clearRect(0, 0, g.getClip().getBounds().width, g.getClip().getBounds().height);
@@ -68,18 +68,19 @@ public class GraphicPanel extends JPanel implements Runnable {
         Gear g4=new Gear();
         Gear g5=new Gear();
         Gear g6=new Gear();
-        g.fillPolygon(g1.drawGear(100, 100,  dearSize, -ang,step) ); 
+        g.fillPolygon(g1.drawGear(100, 100,  dearSize, -ang,step,0.0) ); 
+      //  System.out.println("radius="+g1.getOuterRadius()+" lenght="+g1.getLenght());
         g.setColor(Color.darkGray);
-        g.fillPolygon(g2.drawGear(100+radius*2-10, 100,  dearSize, -g1.getLenght(),step) ); 
+        g.fillPolygon(g2.drawGear(100+radius*2-10, 100,  dearSize, -g1.getLenght(),step,g1.startAngLenght()) ); 
         g.setColor(Color.darkGray);
-        g.fillPolygon(g3.drawGear(100+radius*2-10, 100+radius*2-10,dearSize, -g2.getLenght(),step) ); 
+        g.fillPolygon(g3.drawGear(100+radius*2-10, 100+radius*2-10,dearSize, -g2.getLenght(),step,g2.startAngLenght()) ); 
         //drawStar(100, 191, 40, 50, dearSize, -ang + dAng, g, polygon);
         g.setColor(emptyColor);
-        g.fillPolygon(g4.drawGear((100+radius*2-3)+radius-10, (100+radius*2-3)+radius-10, dearSize/2,-g3.getLenght(),step) ); 
+        g.fillPolygon(g4.drawGear((100+radius*2-3)+radius-10, (100+radius*2-3)+radius-10, dearSize/2,-g3.getLenght(),step,g3.startAngLenght()) ); 
         g.setColor(Color.RED);
-        g.fillPolygon(g5.drawGear(((100+radius*2-3)+radius-10)+radius/2-3, ((100+radius*2-3)+radius-10)+radius/2-3,8,-g4.getLenght(),step) );   
+        g.fillPolygon(g5.drawGear(((100+radius*2-3)+radius-10)+radius/2-3, ((100+radius*2-3)+radius-10)+radius/2-3,8,-g4.getLenght(),step,g4.startAngLenght()) );   
         g.setColor(Color.black);
-        g.fillPolygon(g6.drawGear((((100+radius*2-3)+radius-10)+radius/2-3)+radius*3+40, (((100+radius*2-3)+radius-10)+radius/2-3)+radius*3+40, dearSize*5,-g5.getLenght(),step) ); 
+        g.fillPolygon(g6.drawGear((((100+radius*2-3)+radius-10)+radius/2-3)+radius*3+40, (((100+radius*2-3)+radius-10)+radius/2-3)+radius*3+40, dearSize*5,-g5.getLenght(),step,g5.startAngLenght()) ); 
         super.setBackground(bachgroundColor);
         
     }

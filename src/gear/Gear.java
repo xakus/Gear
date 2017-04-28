@@ -20,10 +20,12 @@ public class Gear {
             innerRadius,
             outerRadius,
             startAngleR,
-            realAngleR;
+            realAngleR,
+            startAngLenght,
+            stepLenght;
     private int numRays;
     private int[] x, y;
-    private double linght=0.0;
+    private double lenght=0.0;
     private Polygon polygon;
 
     public double getKoordX() {
@@ -83,17 +85,42 @@ public class Gear {
     }
     
    public double getLenght (){
-       return linght;
+       return lenght;
    }
-
-    
-    private double angleToLenght(double angle) {
-
-        realAngleR =(180.0/(numRays*3.0))+angle;
-        linght=(Math.PI*outerRadius*realAngleR)/180.0;
-        return linght;
+   public static double degreeToRadian(double angle){
+       double radian ;
+       radian=(angle*Math.PI)/180.0;
+       return radian; 
+   }
+     public static double radianToDegree(double angle){
+       double radian ;
+       radian=(angle*180.0)/Math.PI;
+       
+       return radian; 
+   }
+    public double startAngLenght(){
+        double l;
+        l= degreeToLenght((180.0/(double)(numRays)));
+        return l;
     }
-   private double lengthToAngle(double l){
+    private double radianToLenght(double angle) {
+
+       // realAngleR =(angleToRadian((180.0/(double)(numRays)))+angle);
+        realAngleR =radianToDegree(angle);
+        lenght=(Math.PI*outerRadius*realAngleR)/180.0;
+        return lenght;
+    }
+    private double degreeToLenght(double angle) {
+
+       // realAngleR =(angleToRadian((180.0/(double)(numRays)))+angle);
+        realAngleR =angle;
+        lenght=(Math.PI*outerRadius*realAngleR)/180.0;
+        return lenght;
+    }
+   private double lengthToRadian(double l){
+       return degreeToRadian(((180.0*l)/(Math.PI*outerRadius)));
+   }
+   private double lengthToDegree(double l){
        return ((180.0*l)/(Math.PI*outerRadius));
    }
     public Gear() {
@@ -122,28 +149,29 @@ public class Gear {
         this.outerRadius = outerRadius;
         this.startAngleR = startAngleR;
         this.numRays = numRays;
-        polygon = drawGear(koordX, koordY, numRays, startAngleR,0);
+        polygon = drawGear(koordX, koordY, numRays, startAngleR,0,0);
     }
 
     public Polygon drawGear(double koordX, double koordY,
-            int numRays,
-            double startAngleR,double stepLenght ) {
-        
+            int numRays,double startAngleR,double stepLenght,double startAngLenght ) {
+            
+        this.stepLenght=stepLenght;
         this.koordX = koordX;
         this.koordY = koordY;
-        this.innerRadius = innerRadius;
-        this.outerRadius = outerRadius;
-        this.startAngleR = startAngleR;
+        this.startAngleR =degreeToRadian(startAngleR) ;
         this.numRays = numRays*2;
-        this.outerRadius= (numRays*stepLenght)/(2*Math.PI);
+        this.outerRadius= (numRays*this.stepLenght)/(2*Math.PI);
         this.innerRadius=this.outerRadius-8.0;
+        this.startAngLenght=startAngLenght;
+        radianToLenght(this.startAngleR);
         x = new int[numRays * 2];
         y = new int[numRays * 2];
-        angleToLenght(lengthToAngle(startAngleR));
+        //angleToLenght(lengthToAngle(this.startAngleR ));
         polygon = new Polygon();
         double deltaAngleR = Math.PI / (double)  this.numRays;
         for (int i = 0; i <  this.numRays * 2.0; i++) {
-            double angleR =lengthToAngle(startAngleR)+ (double) i * deltaAngleR;
+            //double angleR =lengthToAngle(angleToLenght(lengthToAngle(this.startAngleR )+angleToRadian(angle)))+ (double) i * deltaAngleR;
+            double angleR =lengthToRadian(this.startAngleR)+(double) i * deltaAngleR;
             double ca = Math.cos(angleR);
             double sa = Math.sin(angleR);
             double relX = ca;
@@ -168,38 +196,6 @@ public class Gear {
         // g.fillOval((int) (koordX - (innerRadius / 4)), (int) (koordY - (innerRadius / 4)), (int) ((innerRadius / 2)), (int) ((innerRadius / 2)));
         return polygon;
     }
-
-    public Polygon drawGear() {
-
-        Polygon p = new Polygon();
-        double deltaAngleR = Math.PI / (double) numRays;
-        for (int i = 0; i < numRays * 2.0; i++) {
-            double angleR =lengthToAngle(startAngleR)+ (double) i * deltaAngleR;
-            double ca = Math.cos(angleR);
-            double sa = Math.sin(angleR);
-            double relX = ca;
-            double relY = sa;
-            if ((i & 2) == 0) {
-                relX *= outerRadius;
-                relY *= outerRadius;
-            } else {
-                relX *= innerRadius;
-                relY *= innerRadius;
-            }
-
-            x[i] = (int) (koordX + relX);
-            y[i] = (int) (koordY + relY);
-
-            p.addPoint((int) (koordX + relX), (int) (koordY + relY));
-
-        }
-
-        // g.fillPolygon(p);
-        // g.setColor(Color.CYAN);
-        // g.fillOval((int) (koordX - (innerRadius / 4)), (int) (koordY - (innerRadius / 4)), (int) ((innerRadius / 2)), (int) ((innerRadius / 2)));
-        return p;
-    }
-
     public Polygon getPolygon() {
         return polygon;
     }
